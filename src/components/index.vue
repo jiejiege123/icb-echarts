@@ -58,8 +58,7 @@ import RowBottomLeft from './view/RowBottomLeft.vue'
 import RowBottomLeftOne from './view/RowBottomLeftOne.vue'
 import RowBottomRight from './view/RowBottomRight.vue'
 import RowBottomRightOne from './view/RowBottomRightOne.vue'
-import { setInterval } from 'timers'
-
+import { getMokeTest } from '@/api/user.js'
 export default {
   name: 'bigshow',
   components: {
@@ -78,21 +77,41 @@ export default {
     return {
       msg: '欢迎来到菜鸟教程！',
       rightData: [],
-      number1: 1234
+      number1: 1234,
+      timeEr: ''
     }
+  },
+  created () {
+    this.getData()
   },
   mounted () {
-    this.setSome()
+    // this.setSome()
   },
   methods: {
-    setSome () {
-      var self = this
-      setInterval(getTotelNumber, 6000)
-      function getTotelNumber () {
-        self.number1 = Number(Math.floor(Math.random() * (9999 - 1000)) + 1000)
+    getData () {
+      if (this.timeEr) {
+        clearTimeout(this.timeEr)
+        this.timeEr = null
       }
-      getTotelNumber()
+      getMokeTest().then(res => {
+        this.timeEr = setTimeout(this.getData, 2000)
+      }).catch(err => {
+        console.error(err)
+      })
     }
+    // setSome () {
+    //   var self = this
+    //   setInterval(getTotelNumber, 6000)
+    //   function getTotelNumber () {
+    //     self.number1 = Number(Math.floor(Math.random() * (9999 - 1000)) + 1000)
+    //     getMokeTest().then(res => {
+    //       console.log(res)
+    //     }).catch(err => {
+    //       console.error(err)
+    //     })
+    //   }
+    //   getTotelNumber()
+    // }
   }
 }
 </script>

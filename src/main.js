@@ -3,11 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { mockXHR } from '../mock'
+// 引入dataV
+import dataV from '@jiaminghi/data-view'
+
+if (process.env.NODE_ENV === 'development') {
+  mockXHR()
+}
 
 Vue.config.productionTip = false
-
-//引入dataV
-import dataV from '@jiaminghi/data-view'
 Vue.use(dataV)
 
 /* eslint-disable no-new */
