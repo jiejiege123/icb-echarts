@@ -9,14 +9,14 @@
 </template>
 
 <script>
-	export default {
-		name: 'MiddleTop',
-		data() {
-			return {
+export default {
+  name: 'MiddleTop',
+  data () {
+    return {
 
-			}
-		}
-	}
+    }
+  }
+}
 </script>
 
 <style>

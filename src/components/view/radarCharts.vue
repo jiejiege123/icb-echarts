@@ -1,22 +1,45 @@
 <template>
-	<dv-border-box-13 :color="['#235fa7','#4fd2dd']">
-		<p class="view-chart-title">渠道种类交易占比</p>
+  <dv-border-box-13 :color="['#235fa7','#4fd2dd']">
+		<p class="view-chart-title">{{title}}</p>
 		<div class="view-row-middle-right-chartbox">
 			<ul class="view-row-bottom-right-one-ulbox">
-				<li v-for="(item,i) in list" v-text="item"></li>
+				<li v-for="(item,i) in list" :key="i" v-text="item"></li>
 			</ul>
 			<dv-charts :option="viewRadar" />
 		</div>
 	</dv-border-box-13>
+  <!-- <dv-charts :option="viewLine" /> -->
 </template>
 
 <script>
 export default {
-  name: 'RowBottomRightOne',
-  data () {
-    return {
-      list: ['A：柜面', 'B：手机银行', 'C：网上银行', 'D：机构客户', 'E：公司客户', 'F：个人客户'],
-      viewRadar: {
+  name: 'lineCharts',
+  props: {
+    eData: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    list: {
+      type: Array,
+      default () {
+        return ['A：柜面', 'B：手机银行', 'C：网上银行', 'D：机构客户', 'E：公司客户', 'F：个人客户']
+      }
+    },
+    title: {
+      type: String,
+      default: ''
+    }
+  },
+  watch: {
+    eData (news, old) {
+      this.setTime(news)
+    }
+  },
+  computed: {
+    viewRadar () {
+      return {
         radar: {
           radius: '83%', // 半径
           indicator: [{
@@ -83,6 +106,24 @@ export default {
           }
         }]
       }
+    }
+  },
+  data () {
+    return {
+
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    setTime (data) {
+      const { viewLine } = this
+      viewLine.series[0].data = data
+      /**
+       * 使用ES6拓展运算符生成新的props对象
+       * 组件侦知数据变化 自动刷新状态
+       */
+      this.viewLine = { ...viewLine }
     }
   }
 }

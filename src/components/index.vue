@@ -5,42 +5,51 @@
 			<!-- 第一列 -->
 			<div style="display: flex;height: 15%;margin-top: 2%;">
 				<div class="view-left-top">
-					<left-top :number1="number1" />
+					<left-top/>
 				</div>
 				<div class="view-middle-top">
-					<middle-top />
+					<middle-top/>
 				</div>
 				<div class="view-right-top">
-					<right-top />
+					<right-top :eData="resTimes" />
 				</div>
 			</div>
 			<!-- 第二列 -->
 			<div style="display: flex;height: 50%;margin-top: 1%;">
 				<div class="view-row-middle-left">
-					<row-middle-left />
+					<row-middle-left
+						:totalNumData="totalNumData"
+						:dayNumData="dayNumData"
+						:dayTransaction="dayTransaction"
+						:allTransaction="allTransaction"
+					/>
 				</div>
 				<div class="view-row-middle-map">
-					<row-middle-map />
+					<!-- 地图 -->
+					<row-middle-map  :eData="mapData" />
 				</div>
 				<div class="view-row-middle-right">
-					<row-middle-right :rightData="rightData" />
+					<!-- 交易量 -->
+					<row-middle-right
+						:severResTime="severResTime"
+						:transactionRank="transactionRank" />
 				</div>
 			</div>
 			<!-- 第三列 -->
 			<div style="display: flex;height: 24%;margin-top: 1%;margin-bottom: 2%;">
 				<div class="view-row-bottom-left">
-					<row-bottom-left></row-bottom-left>
+					<line-charts title="交易率(笔/分钟)" :eData="transactionRate" />
 				</div>
 				<div style="width: 47%;display: flex;">
 					<div class="view-row-bottom-left-one">
-						<row-bottom-left-one></row-bottom-left-one>
+						<line-charts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate" />
 					</div>
 					<div class="view-row-bottom-right">
-						<row-bottom-right></row-bottom-right>
+						<line-charts title="交易并发量(笔/秒)" :eData="transactionSuccessRate" />
 					</div>
 				</div>
 				<div class="view-row-bottom-right-one">
-					<row-bottom-right-one></row-bottom-right-one>
+					<radar-charts title="渠道种类交易占比" :eData="channelTransaction" />
 				</div>
 			</div>
 		</dv-full-screen-container>
@@ -54,11 +63,9 @@ import RightTop from './view/RightTop.vue'
 import RowMiddleLeft from './view/RowMiddleLeft.vue'
 import RowMiddleMap from './view/RowMiddleMap.vue'
 import RowMiddleRight from './view/RowMiddleRight.vue'
-import RowBottomLeft from './view/RowBottomLeft.vue'
-import RowBottomLeftOne from './view/RowBottomLeftOne.vue'
-import RowBottomRight from './view/RowBottomRight.vue'
-import RowBottomRightOne from './view/RowBottomRightOne.vue'
 import { getMokeTest } from '@/api/user.js'
+import lineCharts from '@/components/view/lineCharts'
+import radarCharts from '@/components/view/radarCharts'
 export default {
   name: 'bigshow',
   components: {
@@ -68,24 +75,32 @@ export default {
     RowMiddleLeft,
     RowMiddleMap,
     RowMiddleRight,
-    RowBottomLeft,
-    RowBottomLeftOne,
-    RowBottomRight,
-    RowBottomRightOne
+    lineCharts,
+    radarCharts
   },
   data () {
     return {
       msg: '欢迎来到菜鸟教程！',
       rightData: [],
       number1: 1234,
-      timeEr: ''
+      timeEr: '',
+      mapData: [],
+      resTimes: [],
+      allTransaction: [],
+      totalNumData: [],
+      dayTransaction: [],
+      dayNumData: [],
+      severResTime: [],
+      transactionRank: [],
+      transactionRate: [],
+      transactionSuccessRate: [],
+      channelTransaction: []
     }
   },
   created () {
     this.getData()
   },
   mounted () {
-    // this.setSome()
   },
   methods: {
     getData () {
@@ -99,19 +114,6 @@ export default {
         console.error(err)
       })
     }
-    // setSome () {
-    //   var self = this
-    //   setInterval(getTotelNumber, 6000)
-    //   function getTotelNumber () {
-    //     self.number1 = Number(Math.floor(Math.random() * (9999 - 1000)) + 1000)
-    //     getMokeTest().then(res => {
-    //       console.log(res)
-    //     }).catch(err => {
-    //       console.error(err)
-    //     })
-    //   }
-    //   getTotelNumber()
-    // }
   }
 }
 </script>

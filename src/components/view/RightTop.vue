@@ -8,21 +8,47 @@
 </template>
 
 <script>
-	export default {
-		name: 'RightTop',
-		data() {
-			return {
-				config: {
-					number: [148.27],
-					toFixed: 2,
-					content: '{nt}s',
-					style: {
-						fill: "#04fcfc"
-					}
-				}
-			}
-		}
-	}
+export default {
+  name: 'RightTop',
+  props: {
+    eData: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
+  watch: {
+    eData (news, old) {
+      this.setTime(news)
+    }
+  },
+  data () {
+    return {
+      config: {
+        number: [148.27],
+        toFixed: 2,
+        content: '{nt}s',
+        style: {
+          fill: '#04fcfc'
+        }
+      }
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    setTime (data) {
+      const { config } = this
+      config.number = data
+      /**
+       * 使用ES6拓展运算符生成新的props对象
+       * 组件侦知数据变化 自动刷新状态
+       */
+      this.config = { ...config }
+    }
+  }
+}
 </script>
 
 <style>
