@@ -1,10 +1,18 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-06-24 08:26:32
+ * @LastEditTime: 2020-06-24 12:32:19
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\RowMiddleRight.vue
+-->
 <template>
 	<div style="height: 100%;">
 		<div class="view-row-middle-right-chartOutBox">
 			<line-charts title="服务响应时间(ms)" :eData="severResTime" />
 		</div>
 		<div class="view-row-middle-right-chartOutBox" style="margin-top: 4.2%;">
-			<bar-charts :eData="transactionRank" />
+			<bar-charts :xData="xData" :eData="transactionRank" />
 		</div>
 	</div>
 </template>
@@ -26,6 +34,12 @@ export default {
       }
     },
     transactionRank: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    xData: {
       type: Array,
       default () {
         return []

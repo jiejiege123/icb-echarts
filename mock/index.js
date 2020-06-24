@@ -1,20 +1,18 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 17:12:25
- * @LastEditTime: 2020-06-23 17:13:09
- * @LastEditors: your name
+ * @LastEditTime: 2020-06-24 08:46:03
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\mock\index.js
  */
 import Mock from 'mockjs'
 import { param2Obj } from '../src/utils'
 
-import user from './user'
-import table from './table'
+import dcsData from './dcsData'
 
 const mocks = [
-  ...user,
-  ...table
+  ...dcsData
 ]
 
 // for front mock

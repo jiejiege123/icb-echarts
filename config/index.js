@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-06-19 14:44:08
+ * @LastEditTime: 2020-06-24 17:39:18
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \bpsp-uie:\ICBC\my\config\index.js
+ */ 
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -49,8 +57,8 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsSubDirectory: '',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

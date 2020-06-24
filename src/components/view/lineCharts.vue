@@ -20,17 +20,25 @@ export default {
     xData: {
       type: Array,
       default () {
-        return ['0', '1', '2', '3', '4', '5', '6']
+        let arra = []
+        for (let i = 0; i < 61; i++) {
+          arra.push(i)
+        }
+        return arra
       }
     },
     showSplitLine: {
       type: Boolean,
-      default: true
+      default: false
     },
     formatter: {
       type: Function,
       default: (dataItem) => {
-        return dataItem.value
+        if (dataItem.index % 10 === 0) {
+          return dataItem.value
+        } else {
+          return ''
+        }
       }
     },
     title: {
@@ -41,13 +49,26 @@ export default {
   watch: {
     eData (news, old) {
       this.setTime(news)
+    },
+    xData: {
+      handler (news, old) {
+        this.setXData(news)
+      },
+      immediate: true
+    },
+    formatter: {
+      handler (news, old) {
+        this.setFormatter(news)
+      },
+      immediate: true
     }
   },
-  computed: {
-    viewLine () {
-      return {
+
+  data () {
+    return {
+      viewLine: {
         xAxis: { // X轴
-          data: this.xData,
+          data: [],
           boundaryGap: false, // 刻度点与值的是否对齐
           axisLine: {
             show: true,
@@ -67,8 +88,7 @@ export default {
           axisLabel: { // 坐标轴标签
             style: {
               fill: '#4a5969'
-            },
-            formatter: this.formatter
+            }
           }
         },
         yAxis: { // y轴
@@ -124,21 +144,26 @@ export default {
       }
     }
   },
-  data () {
-    return {
-
-    }
-  },
   mounted () {
   },
   methods: {
-    setTime (data) {
+    setTime (datas) {
       const { viewLine } = this
-      viewLine.series[0].data = data
-      /**
-       * 使用ES6拓展运算符生成新的props对象
-       * 组件侦知数据变化 自动刷新状态
-       */
+      viewLine.series[0].data = datas
+      // this.viewLine = { ...viewLine }
+      this.viewLine = Object.assign({}, this.viewLine, viewLine)
+
+      // this.$set(this.viewLine.series[0], 'data', data)
+    },
+    setXData (data) {
+      const { viewLine } = this
+      viewLine.xAxis.data = data
+      this.viewLine = { ...viewLine }
+    },
+    setFormatter (data) {
+      const { viewLine } = this
+      viewLine.xAxis.axisLabel.formatter = data
+
       this.viewLine = { ...viewLine }
     }
   }

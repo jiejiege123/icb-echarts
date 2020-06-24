@@ -106,11 +106,17 @@ export default {
     }
   },
   watch: {
-    dayTransaction (news, old) {
-      this.setDay(news)
+    dayNumData: {
+      handler (news, old) {
+        this.setDay(news)
+      },
+      immediate: true
     },
-    allTransaction (news, old) {
-      this.setAll(news)
+    totalNumData: {
+      handler (news, old) {
+        this.setAll(news)
+      },
+      immediate: true
     }
   },
   data () {
@@ -134,7 +140,7 @@ export default {
     }
   },
   methods: {
-    setDay (data) {
+    setAll (data) {
       const { totalNum } = this
       totalNum.number = data
       /**
@@ -143,7 +149,7 @@ export default {
        */
       this.totalNum = { ...totalNum }
     },
-    setAll (data) {
+    setDay (data) {
       const { dayNum } = this
       dayNum.number = data
       /**

@@ -17,11 +17,20 @@ export default {
       default () {
         return []
       }
+    },
+    xData: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   watch: {
     eData (news, old) {
       this.setData(news)
+    },
+    xData (news, old) {
+      this.setXData(news)
     }
   },
   data () {
@@ -29,7 +38,7 @@ export default {
       viewBar: {
         xAxis: {
           data: ['', '成都', '宜宾', '德阳', '眉山', '达州', ''], // 这里为了还原效果图，则首尾的数据一定要为空
-          boundaryGap: false, // 刻度点与值的是否对齐
+          boundaryGap: true, // 刻度点与值的是否对齐
           // splitLine: { // 网格线
           //   show: true
           // },
@@ -101,10 +110,13 @@ export default {
     setData (data) {
       const { viewBar } = this
       viewBar.series[0].data = data
-      /**
-       * 使用ES6拓展运算符生成新的props对象
-       * 组件侦知数据变化 自动刷新状态
-       */
+
+      this.viewBar = { ...viewBar }
+    },
+    setXData (data) {
+      const { viewBar } = this
+      viewBar.xAxis.data = data
+
       this.viewBar = { ...viewBar }
     }
   }

@@ -30,42 +30,55 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    indicator: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   watch: {
     eData (news, old) {
       this.setTime(news)
+    },
+    indicator (news, old) {
+      this.setIndicator(news)
     }
   },
   computed: {
-    viewRadar () {
-      return {
+
+  },
+  data () {
+    return {
+      viewRadar: {
         radar: {
           radius: '83%', // 半径
-          indicator: [{
-            name: 'A',
-            max: 100
-          },
-          {
-            name: 'B',
-            max: 100
-          },
-          {
-            name: 'C',
-            max: 100
-          },
-          {
-            name: 'D',
-            max: 100
-          },
-          {
-            name: 'E',
-            max: 100
-          },
-          {
-            name: 'F',
-            max: 100
-          }
+          indicator: [
+            {
+              name: 'A',
+              max: 100
+            },
+            {
+              name: 'B',
+              max: 100
+            },
+            {
+              name: 'C',
+              max: 100
+            },
+            {
+              name: 'D',
+              max: 100
+            },
+            {
+              name: 'E',
+              max: 100
+            },
+            {
+              name: 'F',
+              max: 100
+            }
           ],
           polygon: true, // 多边形
           axisLine: { // 坐标轴线
@@ -108,22 +121,26 @@ export default {
       }
     }
   },
-  data () {
-    return {
-
-    }
-  },
   mounted () {
   },
   methods: {
     setTime (data) {
-      const { viewLine } = this
-      viewLine.series[0].data = data
+      const { viewRadar } = this
+      viewRadar.series[0].data = data
       /**
        * 使用ES6拓展运算符生成新的props对象
        * 组件侦知数据变化 自动刷新状态
        */
-      this.viewLine = { ...viewLine }
+      this.viewRadar = { ...viewRadar }
+    },
+    setIndicator (data) {
+      const { viewRadar } = this
+      viewRadar.radar.indicator = data
+      /**
+       * 使用ES6拓展运算符生成新的props对象
+       * 组件侦知数据变化 自动刷新状态
+       */
+      this.viewRadar = { ...viewRadar }
     }
   }
 }
