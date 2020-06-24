@@ -2,7 +2,9 @@
   <dv-border-box-13 :color="['#235fa7','#4fd2dd']">
     <p class="view-chart-title">地区类交易率排名</p>
     <div class="view-row-middle-right-chartbox">
-      <dv-charts :option="viewBar" />
+      <!-- <dv-charts :option="viewBar" /> -->
+      <div :id="idNo" style="width: 100%;height:100%;"></div>
+
     </div>
   </dv-border-box-13>
 
@@ -12,6 +14,10 @@
 export default {
   name: 'RowMiddleRight',
   props: {
+    idNo: {
+      type: String,
+      default: 'bar'
+    },
     eData: {
       type: Array,
       default () {
@@ -26,8 +32,15 @@ export default {
     }
   },
   watch: {
+    // eData: {
+    //   handler (news, old) {
+    //     this.initOption(news)
+    //   },
+    //   immediate: true
+
+    // },
     eData (news, old) {
-      this.setData(news)
+      this.initOption(news)
     },
     xData (news, old) {
       this.setXData(news)
@@ -101,12 +114,105 @@ export default {
           independentColor: true // 独立配色
 
         }]
-      }
+      },
+      myChart: ''
     }
   },
   mounted () {
+    this.myChart = this.$echarts.init(document.getElementById(this.idNo))
+    window.resize = () => {
+      this.myChart.resize()
+    }
+    this.initOption()
   },
   methods: {
+    initOption (data) {
+      // this.myChart.clear()
+      this.myChart.setOption({
+        grid: { // 图表的上下左右边距
+          left: '12%',
+          right: '10%',
+          top: '10%',
+          bottom: '20%'
+        },
+        xAxis: { // X轴
+          data: this.xData,
+          boundaryGap: false, // 刻度点与值的是否对齐
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#2f4253'
+            }
+          },
+          axisTick: { // 刻度线
+            show: false
+          },
+          splitLine: { // 网格线
+            show: this.showSplitLine,
+            lineStyle: {
+              color: '#2f4253'
+            }
+          },
+          axisLabel: { // 坐标轴标签
+            // style: {
+            //   fill: '#4a5969'
+            // }
+            color: function (value, index) {
+              return '#4a5969'
+            },
+            fontSize: 10
+          }
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          axisTick: { // 刻度线
+            show: false
+          },
+          splitLine: { // 网格线
+            show: true,
+            lineStyle: {
+              color: '#2f4253'
+            }
+          },
+          axisLine: { // 坐标轴线
+            show: true,
+            lineStyle: {
+              color: '#2f4253'
+            }
+          },
+          axisLabel: { // 坐标轴标签
+            // style: {
+            //   fill: '#4a5969'
+            // }
+            color: function (value, index) {
+              return '#4a5969'
+            },
+            fontSize: 10
+          }
+        },
+        series: [{
+          data: data || [0, 932, 901, 934, 1290, 1330, 0],
+          type: 'bar',
+          barWidth: '50%', // 柱状宽度
+          // independentColor: true // 独立配色,
+          itemStyle: {
+            color: function (params) {
+              let colorList = [
+                '#c23531',
+                '#67E0E3',
+                '#61a0a8',
+                '#9FE6B8',
+                '#FFDB5C',
+                '#FF9F7F',
+                '#FF9F7F'
+              ]
+              return colorList[params.dataIndex]
+            }
+          }
+        }]
+      })
+    },
     setData (data) {
       const { viewBar } = this
       viewBar.series[0].data = data

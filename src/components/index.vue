@@ -40,18 +40,27 @@
 			<!-- 第三列 -->
 			<div style="display: flex;height: 24%;margin-top: 1%;margin-bottom: 2%;">
 				<div class="view-row-bottom-left">
-					<line-charts title="交易率(笔/分钟)" :eData="transactionRate" />
+					<!-- <line-charts title="交易率(笔/分钟)" :eData="transactionRate" /> -->
+          <line-echarts title="交易率(笔/分钟)" :eData="transactionRate"
+          idNo="trRate" />
 				</div>
 				<div style="width: 47%;display: flex;">
 					<div class="view-row-bottom-left-one">
-						<line-charts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate" />
+						<!-- <line-charts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate" /> -->
+            <line-echarts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate"
+            idNo="trSuccess" />
 					</div>
 					<div class="view-row-bottom-right">
-						<line-charts
+						<!-- <line-charts
 							title="交易并发量(笔/秒)"
-							:eData="througtputMap"
+							:eData="throughputMap"
 							:formatter="througtputMapFormatter"
-							:xData="througtputMapXData" />
+							:xData="througtputMapXData" /> -->
+              <line-echarts
+                title="交易并发量(笔/秒)"
+                :eData="throughputMap"
+                :xData="througtputMapXData"
+                idNo="jiuy" />
 					</div>
 				</div>
 				<div class="view-row-bottom-right-one">
@@ -74,6 +83,7 @@ import RowMiddleMap from './view/RowMiddleMap.vue'
 import RowMiddleRight from './view/RowMiddleRight.vue'
 import { getMokeTest } from '@/api/user.js'
 import lineCharts from '@/components/view/lineCharts'
+import lineEcharts from '@/components/view/lineEcharts'
 import radarCharts from '@/components/view/radarCharts'
 import { compare } from '@/utils/index'
 
@@ -87,7 +97,8 @@ export default {
     RowMiddleMap,
     RowMiddleRight,
     lineCharts,
-    radarCharts
+    radarCharts,
+    lineEcharts
   },
   data () {
     return {
@@ -119,7 +130,7 @@ export default {
       channelTransaction: [],
       channelTransactionList: [],
       channelTransactionIndicator: [],
-      througtputMap: [],
+      throughputMap: [],
       througtputMapFormatter: (dataItem) => {
         return dataItem.value
       },
@@ -272,7 +283,6 @@ export default {
   mounted () {
   },
   updated () {
-    console.log('12')
   },
   methods: {
     getData () {
@@ -330,7 +340,16 @@ export default {
             },
             'throughputMap': {
               '2020-06-24 18:17:05': '20',
-              '2020-06-24 18:17:06': '22'
+              '2020-06-24 18:17:06': '22',
+              '2020-06-24 18:17:07': '23',
+              '2020-06-24 18:17:08': '33',
+              '2020-06-24 18:17:09': '44',
+              '2020-06-24 18:17:10': '23',
+              '2020-06-24 18:17:11': '52',
+              '2020-06-24 18:17:12': '45',
+              '2020-06-24 18:17:13': '12',
+              '2020-06-24 18:17:14': '8'
+
             },
             'requestedZoneNoList': [
               '04402'
@@ -351,179 +370,192 @@ export default {
             ]
           }
         }
-        console.log(res)
         /** 交易量数据 */
-        this.totalNumData = []
-        this.dayNumData = []
-        this.totalNumData.push(res.data.totalDataVo.apiTotalCount)
-        this.dayNumData.push(res.data.perDayDataVo.apiTotalCount)
+        this.setJyData(res.data)
 
         /** 日平均响应时间 */
-        let resTimes = []
-        resTimes.push(res.data.perDayDataVo.avgResponseTime)
-        this.resTimes = resTimes
+        this.setRjXy(res.data)
 
         /** 交易量饼图 */
-        this.allTransaction = [
-          {
-            name: 'API调用',
-            value: res.data.totalDataVo.apiRequestCount
-          },
-          {
-            name: '前置渠道',
-            value: res.data.totalDataVo.getApipSeqnoCount
-          },
-          {
-            name: '后置渠道',
-            value: res.data.totalDataVo.qryTrxApipSeqnoCount
-          }
-        ]
-        this.dayTransaction = [
-          {
-            name: 'API调用',
-            value: res.data.perDayDataVo.apiRequestCount
-          },
-          {
-            name: '前置渠道',
-            value: res.data.perDayDataVo.getApipSeqnoCount
-          },
-          {
-            name: '后置渠道',
-            value: res.data.perDayDataVo.qryTrxApipSeqnoCount
-          }
-        ]
+        this.setPei(res.data)
 
         /** 地图 */
-        let requestedZoneNoList = res.data.requestedZoneNoList
-        let mapLines = []
-        let mapData = []
-        requestedZoneNoList.forEach(n => {
-          let name = this.position.find(i => i.code === n).name
-          let coordinate = this.position.find(i => i.code === n).lonlat
-          mapLines.push({
-            source: name,
-            target: '后台中心'
-          })
-          mapData.push(
-            {
-              name: name,
-              coordinate: coordinate
-            }
-          )
-        })
-        mapData.unshift({
-          name: '后台中心',
-          icon: {
-            src: '/static/mapCenterPoint.png',
-            width: 30,
-            height: 30
-          },
-          coordinate: [0.59, 0.47],
-          halo: {
-            show: true
-          }
-        })
-        this.mapLines = mapLines
-        this.mapData = mapData
+        this.setMap(res.data.requestedZoneNoList)
 
         /** 地区和渠道 */
-        let zoneNo = []
-        let channel = []
-        for (const i in res.data.perDayDataVo) {
-          if (res.data.perDayDataVo.hasOwnProperty(i)) {
-            const e = res.data.perDayDataVo[i]
-            if (i.includes('zoneNo')) {
-              let code = i.slice(6, 11)
-              let city = this.areaJson[code]
-              zoneNo.push({
-                label: i,
-                value: e,
-                name: city
-              })
-            }
-            if (i.includes('channel')) {
-              channel.push({
-                label: i,
-                value: e,
-                name: this.channelJson[i]
-              })
-            }
-          }
-        }
-        console.log(zoneNo)
-        /// /  排序
-        // 地区
-        zoneNo.sort(compare('value'))
-        zoneNo = zoneNo.slice(0, 5)
-        let transactionRankXData = []
-        let transactionRank = []
-        zoneNo.forEach(n => {
-          transactionRankXData.push(n.name)
-          transactionRank.push(n.value)
-        })
-        transactionRankXData.push('')
-        transactionRankXData.unshift('')
-        this.transactionRankXData = transactionRankXData
+        this.setBarAndRadar(res.data.perDayDataVo)
 
-        transactionRank.push(0)
-        transactionRank.unshift(0)
-        transactionRank.forEach(n => {
-          n = parseInt(n)
-        })
-        this.transactionRank = [0, 2, 22, 1, 2, 3, 0]
-        console.log(transactionRank)
-
-        // 渠道
-        channel.sort(compare('value'))
-        channel = channel.slice(0, 6)
-        let channelTransactionList = []
-        let channelTransactionIndicator = []
-        let channelTransaction = []
-
-        channel.forEach((n, index) => {
-          channelTransactionList.push(`${String.fromCharCode(index + 65)}：${n.name}`)
-          channelTransactionIndicator.push({
-            name: String.fromCharCode(index + 65),
-            max: 100
-          })
-          channelTransaction.push(n.value)
-        })
-
-        this.channelTransactionList = channelTransactionList
-        this.channelTransactionIndicator = channelTransactionIndicator
-        this.channelTransaction = channelTransaction
-
-        // /** 交易率并发量 */
-        let througtputMap = []
-        for (const key in res.data.througtputMap) {
-          if (res.data.througtputMap.hasOwnProperty(key)) {
-            const n = res.data.througtputMap[key]
-            througtputMap.push(n)
-          }
-        }
-        this.througtputMap = througtputMap
+        /** 交易率并发量 */
+        this.setBfalan(res.data.throughputMap)
 
         /** 交易折线图 */
-        let avgResponseTimeList = res.data.avgResponseTimeList
-
-        let severResTime = []
-        let transactionRate = []
-        let transactionSuccessRate = []
-        avgResponseTimeList.forEach(n => {
-          severResTime.push(n.avgResponseTime)
-          transactionRate.push(n.apiTotalCount)
-          transactionSuccessRate.push(n.apiSuccessTotalCount)
-        })
-
-        // this.severResTime = severResTime
-        // this.transactionRate = transactionRate
-        // this.transactionSuccessRate = transactionSuccessRate
+        this.setLineData(res.data.avgResponseTimeList)
 
         /** 轮询 */
         this.timeEr = setTimeout(this.getData, 10000)
       }).catch(err => {
         console.error(err)
       })
+    },
+    setJyData (data) {
+      this.totalNumData = []
+      this.dayNumData = []
+      this.totalNumData.push(parseInt(data.totalDataVo.apiTotalCount)) // 总交易量
+      this.dayNumData.push(parseInt(data.perDayDataVo.apiTotalCount)) // 日交易量
+    },
+    setRjXy (data) {
+      let resTimes = []
+      resTimes.push(parseFloat(data.perDayDataVo.avgResponseTime))
+      this.resTimes = resTimes
+    },
+    setPei (data) {
+      this.allTransaction = [
+        {
+          name: 'API调用',
+          value: parseInt(data.totalDataVo.apiRequestCount)
+        },
+        {
+          name: '前置渠道',
+          value: parseInt(data.totalDataVo.getApipSeqnoCount)
+        },
+        {
+          name: '后置渠道',
+          value: parseInt(data.totalDataVo.qryTrxApipSeqnoCount)
+        }
+      ]
+      this.dayTransaction = [
+        {
+          name: 'API调用',
+          value: parseInt(data.perDayDataVo.apiRequestCount)
+        },
+        {
+          name: '前置渠道',
+          value: parseInt(data.perDayDataVo.getApipSeqnoCount)
+        },
+        {
+          name: '后置渠道',
+          value: parseInt(data.perDayDataVo.qryTrxApipSeqnoCount)
+        }
+      ]
+    },
+    setMap (data) {
+      let requestedZoneNoList = data
+      let mapLines = []
+      let mapData = []
+      requestedZoneNoList.forEach(n => {
+        let name = this.position.find(i => i.code === n).name
+        let coordinate = this.position.find(i => i.code === n).lonlat
+        mapLines.push({
+          source: name,
+          target: '后台中心'
+        })
+        mapData.push(
+          {
+            name: name,
+            coordinate: coordinate
+          }
+        )
+      })
+      mapData.unshift({
+        name: '后台中心',
+        icon: {
+          src: '/static/mapCenterPoint.png',
+          width: 30,
+          height: 30
+        },
+        coordinate: [0.59, 0.47],
+        halo: {
+          show: true
+        }
+      })
+      this.mapLines = mapLines
+      this.mapData = mapData
+    },
+    setBarAndRadar (data) {
+      let zoneNo = []
+      let channel = []
+      for (const i in data) {
+        if (data.hasOwnProperty(i)) {
+          const e = data[i]
+          if (i.includes('zoneNo')) {
+            let code = i.slice(6, 11)
+            let city = this.areaJson[code]
+            zoneNo.push({
+              label: i,
+              value: e,
+              name: city
+            })
+          }
+          if (i.includes('channel')) {
+            channel.push({
+              label: i,
+              value: e,
+              name: this.channelJson[i]
+            })
+          }
+        }
+      }
+      /// /  排序
+      // 地区
+      zoneNo.sort(compare('value'))
+      zoneNo = zoneNo.slice(0, 5)
+      let transactionRankXData = []
+      let transactionRank = []
+      zoneNo.forEach(n => {
+        transactionRankXData.push(n.name)
+        transactionRank.push(parseInt(n.value))
+      })
+      transactionRankXData.push('')
+      transactionRankXData.unshift('')
+      this.transactionRankXData = transactionRankXData
+
+      transactionRank.push(0)
+      transactionRank.unshift(0)
+      this.transactionRank = transactionRank
+
+      // 渠道
+      channel.sort(compare('value'))
+      channel = channel.slice(0, 6)
+      let channelTransactionList = []
+      let channelTransactionIndicator = []
+      let channelTransaction = []
+
+      channel.forEach((n, index) => {
+        channelTransactionList.push(`${String.fromCharCode(index + 65)}：${n.name}`)
+
+        channelTransactionIndicator.push({
+          name: String.fromCharCode(index + 65),
+          max: parseInt(channel[0].value)
+        })
+        channelTransaction.push(parseInt(n.value))
+      })
+      this.channelTransactionList = channelTransactionList
+      this.channelTransactionIndicator = channelTransactionIndicator
+      this.channelTransaction = channelTransaction
+    },
+    setBfalan (data) {
+      let throughputMap = []
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          const n = data[key]
+          throughputMap.push(n)
+        }
+      }
+      this.throughputMap = throughputMap
+    },
+    setLineData (data) {
+      let avgResponseTimeList = data
+      let severResTime = []
+      let transactionRate = []
+      let transactionSuccessRate = []
+      avgResponseTimeList.forEach(n => {
+        severResTime.push(parseFloat(n.avgResponseTime))
+        transactionRate.push(parseFloat(n.apiTotalCount))
+        transactionSuccessRate.push(parseFloat(n.apiSuccessTotalCount))
+      })
+      this.severResTime = severResTime
+      this.transactionRate = transactionRate
+      this.transactionSuccessRate = transactionSuccessRate
     }
   }
 }

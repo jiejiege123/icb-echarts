@@ -145,7 +145,7 @@ export default [
       // data.througtputMap.througtputMap.forEach(n => {
       //   througtputMap.push(n.value)
       // })
-      console.log(data.througtputMap)
+      // console.log(data.througtputMap)
       /** 地区排名数据处理 */
       // perDayDataVo.area
       // return {

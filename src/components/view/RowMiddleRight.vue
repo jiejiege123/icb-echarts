@@ -9,22 +9,28 @@
 <template>
 	<div style="height: 100%;">
 		<div class="view-row-middle-right-chartOutBox">
-			<line-charts title="服务响应时间(ms)" :eData="severResTime" />
+			<!-- <line-charts title="服务响应时间(ms)" :eData="severResTime" /> -->
+      <line-echarts title="服务响应时间(ms)" :eData="severResTime" />
 		</div>
 		<div class="view-row-middle-right-chartOutBox" style="margin-top: 4.2%;">
-			<bar-charts :xData="xData" :eData="transactionRank" />
+			<!-- <bar-charts :xData="xData" :eData="transactionRank" /> -->
+      <bar-echarts idNo="diqbar" :xData="xData" :eData="transactionRank" />
 		</div>
 	</div>
 </template>
 
 <script>
 import lineCharts from '@/components/view/lineCharts'
+import lineEcharts from '@/components/view/lineEcharts'
+import barEcharts from '@/components/view/barEcharts'
 import barCharts from '@/components/view/barCharts'
 export default {
   name: 'RowMiddleRight',
   components: {
     lineCharts,
-    barCharts
+    barCharts,
+    barEcharts,
+    lineEcharts
   },
   props: {
     severResTime: {

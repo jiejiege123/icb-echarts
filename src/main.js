@@ -19,6 +19,10 @@ if (process.env.NODE_ENV === 'development') {
   mockXHR()
 }
 // mockXHR()
+let echarts = require('echarts/lib/echarts')
+require('echarts/lib/chart/line')
+require('echarts/lib/chart/bar')
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 Vue.use(dataV)
 
