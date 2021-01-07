@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-06-24 08:26:32
+ * @LastEditTime: 2020-06-28 09:02:47
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\MiddleTop.vue
+-->
 <template>
 	<div>
 		<div class="center-title-box">

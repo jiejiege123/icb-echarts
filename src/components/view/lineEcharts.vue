@@ -12,6 +12,10 @@
 export default {
   name: 'lineCharts',
   props: {
+    interval: {
+      type: Number,
+      default: 0
+    },
     idNo: {
       type: String,
       default: 'line'
@@ -161,7 +165,7 @@ export default {
   methods: {
     initOption (data) {
       // this.myChart.clear()
-      this.myChart.setOption({
+      let options = {
         grid: { // 图表的上下左右边距
           left: '12%',
           right: '10%',
@@ -235,7 +239,15 @@ export default {
             color: '#0D4055'
           }
         }]
-      })
+      }
+      if (this.interval) {
+        if (this.interval === 1) {
+          options.xAxis.interval = 0
+        } else {
+          options.xAxis.interval = 0
+        }
+      }
+      this.myChart.setOption(options)
     },
     setTime (datas) {
       const { viewLine } = this
@@ -263,20 +275,20 @@ export default {
 <style>
 	.view-row-bottom-left .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
   .view-row-bottom-left-one .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
   .view-row-bottom-right .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
 </style>

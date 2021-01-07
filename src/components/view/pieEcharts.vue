@@ -1,14 +1,15 @@
 <!--
  * @Author: your name
  * @Date: 2020-06-24 08:26:32
- * @LastEditTime: 2020-06-28 12:15:20
+ * @LastEditTime: 2020-06-28 11:05:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\pieCharts.vue
 -->
 <template>
   <div style="width: 50%;">
-    <dv-active-ring-chart :config="config" style="width:100%;height:100%" />
+    <div :id="idNo" style="width: 100%;height:100%;"></div>
+    <!-- <dv-active-ring-chart :config="config" style="width:100%;height:100%" /> -->
   </div>
 </template>
 
@@ -16,6 +17,10 @@
 export default {
   name: 'pieCharts',
   props: {
+    idNo: {
+      type: String,
+      default: 'line'
+    },
     eData: {
       type: Array,
       default () {
@@ -25,7 +30,8 @@ export default {
   },
   watch: {
     eData (news, old) {
-      this.setTime(news)
+      // this.setTime(news)
+      this.initOption(news)
     }
   },
   data () {
@@ -64,14 +70,67 @@ export default {
             value: 80
           }
         ],
-        color: ['#04FCFC', '#FFDB5C', '#9FE6B8'],
         digitalFlopToFixed: 2
       }
     }
   },
   mounted () {
+    this.myChart = this.$echarts.init(document.getElementById(this.idNo))
+    window.resize = () => {
+      this.myChart.resize()
+    }
+    this.initOption()
   },
   methods: {
+    initOption (data) {
+      // this.myChart.clear()
+      this.myChart.setOption({
+        grid: { // 图表的上下左右边距
+          left: '12%',
+          right: '10%',
+          top: '10%',
+          bottom: '20%'
+        },
+        graphic: { // 图形中间文字
+          type: 'text',
+          left: 'center',
+          top: 'center',
+          style: {
+            text: '66',
+            textAlign: 'center',
+            fill: '#fff',
+            fontSize: 60
+          }
+        },
+        series: [
+          {
+            name: '交易量',
+            type: 'pie',
+            radius: ['70%', '80%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '30',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              {value: 335, name: 'API调用'},
+              {value: 310, name: '前置渠道'},
+              {value: 234, name: '后置渠道'}
+            ]
+          }
+        ]
+      })
+    },
     setTime (data) {
       const { config } = this
       config.data = data

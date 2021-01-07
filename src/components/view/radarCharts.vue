@@ -78,6 +78,10 @@ export default {
             {
               name: 'F',
               max: 100
+            },
+            {
+              name: 'g',
+              max: 100
             }
           ],
           polygon: true, // 多边形
@@ -103,7 +107,7 @@ export default {
         },
         series: [{
           type: 'radar',
-          data: [11, 56, 78, 52, 66, 32],
+          data: [11, 56, 78, 52, 66, 32, 88],
           radarStyle: { // 雷达图自定义样式
             lineWidth: 2,
             stroke: '#05ffff', // 边线
@@ -163,7 +167,7 @@ export default {
 		padding: 0;
 		font-size: 12px;
 		padding-left: 6%;
-		padding-top: 8%;
+		padding-top: 3%;
 
 	}
 
@@ -173,8 +177,8 @@ export default {
 
 	.view-row-bottom-right-one .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
 

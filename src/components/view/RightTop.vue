@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-06-24 08:26:32
+ * @LastEditTime: 2020-06-28 10:12:32
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\RightTop.vue
+-->
 <template>
 	<dv-border-box-8 :reverse="true">
 		<div class="right-top-outbox">
@@ -28,7 +36,7 @@ export default {
       config: {
         number: [148.27],
         toFixed: 2,
-        content: '{nt}s',
+        content: '{nt}ms',
         style: {
           fill: '#04fcfc'
         }

@@ -105,7 +105,7 @@ export default {
 		padding: 0;
 		font-size: 12px;
 		padding-left: 6%;
-		padding-top: 8%;
+		padding-top: 3%;
 
 	}
 
@@ -115,8 +115,8 @@ export default {
 
 	.view-row-bottom-right-one .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
 

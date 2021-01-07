@@ -27,11 +27,13 @@
 				</div>
 				<div class="view-row-middle-map">
 					<!-- 地图 -->
-					<row-middle-map :lines="mapLines"  :points="mapData" />
+					<row-middle-map01 :lines="mapLines"  :points="mapData" />
+					<!-- <row-middle-map :lines="mapLines"  :points="mapData" /> -->
 				</div>
 				<div class="view-row-middle-right">
 					<!-- 响应时间 -->
 					<row-middle-right
+            :timeData="transactionRateXData"
 						:severResTime="severResTime"
 						:xData="transactionRankXData"
 						:transactionRank="transactionRank" />
@@ -41,13 +43,13 @@
 			<div style="display: flex;height: 24%;margin-top: 1%;margin-bottom: 2%;">
 				<div class="view-row-bottom-left">
 					<!-- <line-charts title="交易率(笔/分钟)" :eData="transactionRate" /> -->
-          <line-echarts title="交易率(笔/分钟)" :eData="transactionRate"
+          <line-echarts :interval="4" :xData="transactionRateXData" title="交易率(笔/分钟)" :eData="transactionRate"
           idNo="trRate" />
 				</div>
 				<div style="width: 47%;display: flex;">
 					<div class="view-row-bottom-left-one">
 						<!-- <line-charts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate" /> -->
-            <line-echarts title="交易成功率(笔/分钟)" :eData="transactionSuccessRate"
+            <line-echarts :interval="4" :xData="transactionRateXData" title="交易成功笔数(笔/分钟)" :eData="transactionSuccessRate"
             idNo="trSuccess" />
 					</div>
 					<div class="view-row-bottom-right">
@@ -71,6 +73,12 @@
 				</div>
 			</div>
 		</dv-full-screen-container>
+    <!-- 错误提示 -->
+    <div v-if="showError" class="error-warp">
+      <div class="error-tip">
+        {{error}}
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -80,6 +88,7 @@ import MiddleTop from './view/MiddleTop.vue'
 import RightTop from './view/RightTop.vue'
 import RowMiddleLeft from './view/RowMiddleLeft.vue'
 import RowMiddleMap from './view/RowMiddleMap.vue'
+import RowMiddleMap01 from './view/RowMiddleMap01.vue'
 import RowMiddleRight from './view/RowMiddleRight.vue'
 import { getMokeTest } from '@/api/user.js'
 import lineCharts from '@/components/view/lineCharts'
@@ -95,6 +104,7 @@ export default {
     RightTop,
     RowMiddleLeft,
     RowMiddleMap,
+    RowMiddleMap01,
     RowMiddleRight,
     lineCharts,
     radarCharts,
@@ -107,6 +117,8 @@ export default {
         backgroundImage: `url(${require('@/assets/bg.png')})`
       },
       msg: '欢迎来到菜鸟教程！',
+      error: '欢迎来到菜鸟教程！',
+      showError: false,
       rightData: [],
       number1: 1234,
       timeEr: '',
@@ -123,10 +135,13 @@ export default {
       dayTransaction: [],
       dayNumData: [],
       severResTime: [],
+      severResXData: [],
       transactionRank: [],
       transactionRankXData: [],
       transactionRate: [],
       transactionSuccessRate: [],
+      transactionRateXData: [],
+      transactionSuccessRateXData: [],
       channelTransaction: [],
       channelTransactionList: [],
       channelTransactionIndicator: [],
@@ -187,7 +202,7 @@ export default {
         {
           name: '内江',
           code: '02307',
-          lonlat: [0.68, 0.51]
+          lonlat: [0.66, 0.55]
         },
         {
           name: '绵阳',
@@ -207,7 +222,7 @@ export default {
         {
           name: '资阳',
           code: '02312',
-          lonlat: [0.63, 0.48]
+          lonlat: [0.66, 0.50]
         },
         {
           name: '眉山',
@@ -291,15 +306,16 @@ export default {
         this.timeEr = null
       }
       getMokeTest().then(res => {
+        this.showError = false
         res = {
           'code': 200,
           'msg': '',
           'data': {
             'totalDataVo': {
               'apiTotalCount': 81872,
-              'apiRequestCount': 81871,
-              'getApipSeqnoCount': 1,
-              'qryTrxApipSeqnoCount': 1
+              'apiRequestCount': 852.5,
+              'getApipSeqnoCount': 54.6,
+              'qryTrxApipSeqnoCount': 448
             },
             'perDayDataVo': {
               'apiTotalCount': 81870,
@@ -330,13 +346,13 @@ export default {
               'zoneNo02320Count': '0',
               'zoneNo02321Count': '0',
               'zoneNo02322Count': '0',
-              'channelCounterStaffCount': '0',
-              'channelSelfHelpCount': '0',
+              'channelCounterStaffCount': '120',
+              'channelSelfHelpCount': '30',
               'channelNetworkCount': '0',
               'channelPartnerLinkCount': '1139',
-              'channelSystemBatchCount': '80731',
-              'channelInfoPublishCount': '0',
-              'channelManagementCount': '0'
+              'channelSystemBatchCount': '529',
+              'channelInfoPublishCount': '220',
+              'channelManagementCount': '60'
             },
             'throughputMap': {
               '2020-06-24 18:17:05': '20',
@@ -360,6 +376,36 @@ export default {
                 'avgResponseTime': '42.35',
                 'apiTotalCount': '1208',
                 'apiSuccessTotalCount': '1208'
+              },
+              {
+                'tradeDatetime': '2020-06-24 17:18',
+                'avgResponseTime': '74.20',
+                'apiTotalCount': '1232',
+                'apiSuccessTotalCount': '1232'
+              },
+              {
+                'tradeDatetime': '2020-06-24 17:18',
+                'avgResponseTime': '74.20',
+                'apiTotalCount': '1232',
+                'apiSuccessTotalCount': '1232'
+              },
+              {
+                'tradeDatetime': '2020-06-24 17:18',
+                'avgResponseTime': '74.20',
+                'apiTotalCount': '1232',
+                'apiSuccessTotalCount': '1232'
+              },
+              {
+                'tradeDatetime': '2020-06-24 17:18',
+                'avgResponseTime': '74.20',
+                'apiTotalCount': '1232',
+                'apiSuccessTotalCount': '1232'
+              },
+              {
+                'tradeDatetime': '2020-06-24 17:18',
+                'avgResponseTime': '74.20',
+                'apiTotalCount': '1232',
+                'apiSuccessTotalCount': '1232'
               },
               {
                 'tradeDatetime': '2020-06-24 17:18',
@@ -395,13 +441,17 @@ export default {
         this.timeEr = setTimeout(this.getData, 10000)
       }).catch(err => {
         console.error(err)
+        this.error = err || '系统错误'
+        this.showError = true
+        this.timeEr = setTimeout(this.getData, 10000)
       })
     },
     setJyData (data) {
       this.totalNumData = []
       this.dayNumData = []
       this.totalNumData.push(parseInt(data.totalDataVo.apiTotalCount)) // 总交易量
-      this.dayNumData.push(parseInt(data.perDayDataVo.apiTotalCount)) // 日交易量
+      // this.dayNumData.push(parseInt(data.perDayDataVo.apiTotalCount)) // 日交易量
+      this.dayNumData = [0]
     },
     setRjXy (data) {
       let resTimes = []
@@ -409,7 +459,7 @@ export default {
       this.resTimes = resTimes
     },
     setPei (data) {
-      this.allTransaction = [
+      let allTransaction = [
         {
           name: 'API调用',
           value: parseInt(data.totalDataVo.apiRequestCount)
@@ -423,7 +473,7 @@ export default {
           value: parseInt(data.totalDataVo.qryTrxApipSeqnoCount)
         }
       ]
-      this.dayTransaction = [
+      let dayTransaction = [
         {
           name: 'API调用',
           value: parseInt(data.perDayDataVo.apiRequestCount)
@@ -437,6 +487,20 @@ export default {
           value: parseInt(data.perDayDataVo.qryTrxApipSeqnoCount)
         }
       ]
+      let all = []
+      allTransaction.forEach(n => {
+        if (n.value) {
+          all.push(n)
+        }
+      })
+      let day = []
+      dayTransaction.forEach(n => {
+        if (n.value) {
+          day.push(n)
+        }
+      })
+      this.allTransaction = all
+      this.dayTransaction = day
     },
     setMap (data) {
       let requestedZoneNoList = data
@@ -459,7 +523,7 @@ export default {
       mapData.unshift({
         name: '后台中心',
         icon: {
-          src: '/static/mapCenterPoint.png',
+          src: require('@/assets/mapCenterPoint.png'),
           width: 30,
           height: 30
         },
@@ -498,12 +562,14 @@ export default {
       /// /  排序
       // 地区
       zoneNo.sort(compare('value'))
-      zoneNo = zoneNo.slice(0, 5)
+      if (zoneNo.length > 5) {
+        zoneNo = zoneNo.slice(0, 5)
+      }
       let transactionRankXData = []
       let transactionRank = []
       zoneNo.forEach(n => {
         transactionRankXData.push(n.name)
-        transactionRank.push(parseInt(n.value))
+        transactionRank.push(parseInt(n.value / 1000))
       })
       transactionRankXData.push('')
       transactionRankXData.unshift('')
@@ -511,11 +577,12 @@ export default {
 
       transactionRank.push(0)
       transactionRank.unshift(0)
+      // console.log(transactionRank)
       this.transactionRank = transactionRank
 
       // 渠道
       channel.sort(compare('value'))
-      channel = channel.slice(0, 6)
+      channel = channel.slice(0, 7)
       let channelTransactionList = []
       let channelTransactionIndicator = []
       let channelTransaction = []
@@ -532,6 +599,7 @@ export default {
       this.channelTransactionList = channelTransactionList
       this.channelTransactionIndicator = channelTransactionIndicator
       this.channelTransaction = channelTransaction
+      // console.log(channelTransactionList, channelTransactionIndicator, channelTransaction)
     },
     setBfalan (data) {
       let throughputMap = []
@@ -548,19 +616,25 @@ export default {
       let severResTime = []
       let transactionRate = []
       let transactionSuccessRate = []
+      let transactionRateXData = []
       avgResponseTimeList.forEach(n => {
         severResTime.push(parseFloat(n.avgResponseTime))
         transactionRate.push(parseFloat(n.apiTotalCount))
         transactionSuccessRate.push(parseFloat(n.apiSuccessTotalCount))
+        // console.log(n.tradeDatetime)
+        transactionRateXData.push(n.tradeDatetime.slice(11, 16))
       })
+
       this.severResTime = severResTime
       this.transactionRate = transactionRate
       this.transactionSuccessRate = transactionSuccessRate
+      this.transactionRateXData = transactionRateXData
+      // console.log(transactionRateXData, transactionSuccessRate)
     }
   }
 }
 </script>
-<style>
+<style scoped>
 	#data-view {
 		width: 100%;
 		height: 100%;
@@ -642,4 +716,43 @@ export default {
 		margin: 0px 1.2%;
 		margin-right: 1.8%;
 	}
+  .error-warp{
+    top: 2px;
+    position: absolute;
+    color: red;
+    width: 100%;
+    z-index: 99999;
+  }
+  /* .error-tip{
+    color: red;
+    height: 60px;
+    width: 500px;
+    line-height: 60px;
+    background: #fff;
+    border-radius: 10px;
+    margin: 0 auto;
+    text-align: center;
+  } */
+  .el-message--error {
+    background-color: #fef0f0;
+    border-color: #fde2e2;
+  }
+  .error-tip {
+      min-width: 380px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ebeef5;
+      position: fixed;
+      left: 50%;
+      top: 2px;
+      transform: translateX(-50%);
+      background-color: #edf2fc;
+      transition: opacity .3s,transform .4s,top .4s;
+      overflow: hidden;
+      padding: 10px 10px 10px 15px;
+      display: flex;
+      align-items: center;
+      background-color: #fef0f0;
+      border-color: #fde2e2;
+  }
 </style>

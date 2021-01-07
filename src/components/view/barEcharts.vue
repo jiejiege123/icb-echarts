@@ -1,10 +1,9 @@
 <template>
   <dv-border-box-13 :color="['#235fa7','#4fd2dd']">
-    <p class="view-chart-title">地区类交易率排名</p>
+    <p class="view-chart-title">地区类交易率排名(千笔)</p>
     <div class="view-row-middle-right-chartbox">
       <!-- <dv-charts :option="viewBar" /> -->
       <div :id="idNo" style="width: 100%;height:100%;"></div>
-
     </div>
   </dv-border-box-13>
 
@@ -14,6 +13,10 @@
 export default {
   name: 'RowMiddleRight',
   props: {
+    interval: {
+      type: Number,
+      default: 0
+    },
     idNo: {
       type: String,
       default: 'bar'
@@ -128,7 +131,7 @@ export default {
   methods: {
     initOption (data) {
       // this.myChart.clear()
-      this.myChart.setOption({
+      let options = {
         grid: { // 图表的上下左右边距
           left: '12%',
           right: '10%',
@@ -157,6 +160,7 @@ export default {
             // style: {
             //   fill: '#4a5969'
             // }
+            // interval: 0,
             color: function (value, index) {
               return '#4a5969'
             },
@@ -211,7 +215,15 @@ export default {
             }
           }
         }]
-      })
+      }
+      if (this.interval) {
+        if (this.interval === 1) {
+          options.xAxis.axisLabel.interval = 0
+        } else {
+          options.xAxis.axisLabel.interval = this.interval
+        }
+      }
+      this.myChart.setOption(options)
     },
     setData (data) {
       const { viewBar } = this
@@ -236,8 +248,8 @@ export default {
 
 	.view-row-middle-right-chartOutBox .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
 

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-06-24 08:42:37
+ * @LastEditTime: 2020-06-28 15:41:10
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \bpsp-uie:\ICBC\my\src\utils\request.js
+ */
 
 import axios from 'axios'
 
@@ -29,7 +37,8 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code && res.code !== 200) {
-      return Promise.reject(new Error(res.Msg || 'Error'))
+      // return Promise.reject(new Error(res.msg || 'Error'))
+      return Promise.reject(res.msg)
     } else {
       return res
     }

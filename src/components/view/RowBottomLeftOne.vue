@@ -25,11 +25,11 @@ export default {
 }
 </script>
 
-<style>
+<style >
 	.view-row-bottom-left-one .border-box-content {
 		padding: 6%;
-		width: 88%;
-		height: 90%;
+		width: 88% !important;
+		height: 90% !important;
 		padding-bottom: 0;
 	}
   .view-row-middle-right-chartbox {

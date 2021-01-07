@@ -7,14 +7,16 @@
 			</div>
 			<div style="width: 50%;">
 				<row-bottom-left :eData="allTransaction" style="width:100%;height:100%" />
+				<!-- <pie-echarts idNo="allpie" :eData="allTransaction" style="width:100%;height:100%" /> -->
 			</div>
 		</div>
 		<dv-decoration-2 style="width:100%;height:10%;" :color="['#235fa7','#4fd2dd']" />
 		<div class="view-row-middle-left-down">
 			<div style="width: 50%;">
 				<p class="view-row-middle-left-title">日交易量</p>
-				<dv-digital-flop :config="dayNum" style="width:100%;height:40%;" />
-			</div>
+				<dv-digital-flop v-if="dayNumData[0] !== 0" :config="dayNum" style="width:100%;height:40%;" />
+        <span class="day-num" v-else>{{dayNumData[0]}}</span>
+      </div>
 			<div style="width: 50%;">
         <row-bottom-left :eData="dayTransaction" style="width:100%;height:100%" />
 			</div>
@@ -24,10 +26,12 @@
 
 <script>
 import RowBottomLeft from '@/components/view/pieCharts'
+import pieEcharts from '@/components/view/pieEcharts'
 export default {
   name: 'RowMiddleLeft',
   components: {
-    RowBottomLeft
+    RowBottomLeft,
+    pieEcharts
   },
   props: {
     totalNumData: {
@@ -170,9 +174,9 @@ export default {
 	}
 
 	.view-row-middle-left .border-box-content {
-		padding: 7%;
-		width: 86%;
-		height: 85%;
+		padding: 7% !important;
+		width: 86% !important;
+		height: 85% !important;
 	}
 
 	.view-row-middle-left-title {
@@ -185,4 +189,11 @@ export default {
 	.view-row-middle-left .dv-digital-flop {
 		line-height: 60px;
 	}
+  .day-num{
+    width: 100%;
+    height: 40%;
+    line-height: 60px;
+    font-size: 34px;
+    color: #04fcfc;
+  }
 </style>
