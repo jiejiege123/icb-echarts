@@ -7,7 +7,7 @@
  * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\RowMiddleMap.vue
 -->
 <template>
-	<div style="width: 70%;height: 120%;margin: 0 auto;">
+	<div style="width: 80%;height: 120%;margin: 0 auto;">
     <div id="textfeixian" style="width: 100%;height:100%;"></div>
 
 	</div>
@@ -213,8 +213,17 @@ export default {
             name: '四川',
             type: 'map',
             map: 'SC', // 自定义扩展图表类型
+            top: '7%',
+            bottom: '7%',
             label: {
-              show: true
+              show: true,
+              color: '#ffdb5c',
+              fontSize: 14,
+              fontWeight: 600
+            },
+            aspectScale: 0.92,
+            itemStyle: {
+              areaColor: '#3EB9E2'
             }
           }
         ]
