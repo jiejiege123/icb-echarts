@@ -1,21 +1,21 @@
 <!--
  * @Author: your name
  * @Date: 2020-06-19 14:44:08
- * @LastEditTime: 2021-01-07 17:36:30
+ * @LastEditTime: 2021-01-07 17:55:06
  * @LastEditors: zzz
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\src\components\view\RowMiddleMap.vue
 -->
 <template>
 	<div style="width: 70%;height: 120%;margin: 0 auto;">
-		<dv-flyline-chart-enhanced :dev="true" :config="config" style="width:100%;height:100%;" />
-    <!-- <div id="textfeixian" style="width: 100%;height:100%;"></div> -->
+    <div id="textfeixian" style="width: 100%;height:100%;"></div>
 
 	</div>
 
 </template>
 
 <script>
+import geoJson from '@/utils/sichuan.json'
 export default {
   name: 'RowMiddleMap',
   props: {
@@ -179,8 +179,17 @@ export default {
         },
         bgImgSrc: require('@/assets/map2.png')
 
-      }
+      },
+      myChart: ''
     }
+  },
+  mounted () {
+    this.$echarts.registerMap('SC', geoJson)
+    this.myChart = this.$echarts.init(document.getElementById('textfeixian'))
+    window.resize = () => {
+      this.myChart.resize()
+    }
+    this.initOption()
   },
   methods: {
     setLines (data) {
@@ -192,7 +201,28 @@ export default {
       const { config } = this
       config.points = data
       this.config = { ...config }
+    },
+    initOption () {
+      let options = {
+        title: {
+          text: '四川 （2011）'
+        },
+
+        series: [
+          {
+            name: '四川',
+            type: 'map',
+            map: 'SC', // 自定义扩展图表类型
+            label: {
+              show: true
+            }
+          }
+        ]
+
+      }
+      this.myChart.setOption(options)
     }
+
   }
 }
 </script>

@@ -27,7 +27,8 @@
 				</div>
 				<div class="view-row-middle-map">
 					<!-- 地图 -->
-					<row-middle-map :lines="mapLines"  :points="mapData" />
+					<row-middle-map01 :lines="mapLines"  :points="mapData" />
+					<!-- <row-middle-map :lines="mapLines"  :points="mapData" /> -->
 				</div>
 				<div class="view-row-middle-right">
 					<!-- 响应时间 -->
@@ -87,6 +88,7 @@ import MiddleTop from './view/MiddleTop.vue'
 import RightTop from './view/RightTop.vue'
 import RowMiddleLeft from './view/RowMiddleLeft.vue'
 import RowMiddleMap from './view/RowMiddleMap.vue'
+import RowMiddleMap01 from './view/RowMiddleMap01.vue'
 import RowMiddleRight from './view/RowMiddleRight.vue'
 import { getMokeTest } from '@/api/user.js'
 import lineCharts from '@/components/view/lineCharts'
@@ -102,6 +104,7 @@ export default {
     RightTop,
     RowMiddleLeft,
     RowMiddleMap,
+    RowMiddleMap01,
     RowMiddleRight,
     lineCharts,
     radarCharts,

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 17:14:07
- * @LastEditTime: 2020-06-24 14:48:51
+ * @LastEditTime: 2020-07-15 15:22:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\src\utils\index.js
@@ -27,7 +27,7 @@ export function param2Obj (url) {
 }
 
 /**
- * @description 获取两个人自己的随机数
+ * @description 获取两个数之间的随机数
  * @param {Number} maxNum 最大数
  * @param {Number} minNum 最小数
  * @param {Number} decimalNum 如果生成的是带有小数的随机数，则指定随机数的小数点后的位数

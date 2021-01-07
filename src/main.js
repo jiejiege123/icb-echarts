@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-06-19 14:44:08
- * @LastEditTime: 2020-06-28 11:09:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-01-07 17:56:10
+ * @LastEditors: zzz
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\src\main.js
  */
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
 require('echarts/lib/chart/bar')
+require('echarts/lib/chart/map')
 require('echarts/lib/component/graphic')
 require('echarts/lib/chart/pie')
 Vue.prototype.$echarts = echarts
