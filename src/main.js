@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-19 14:44:08
- * @LastEditTime: 2021-01-07 17:56:10
+ * @LastEditTime: 2021-01-08 14:52:30
  * @LastEditors: zzz
  * @Description: In User Settings Edit
  * @FilePath: \bpsp-uie:\ICBC\my\src\main.js
@@ -21,9 +21,13 @@ if (process.env.NODE_ENV === 'development') {
 // mockXHR()
 let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/line')
+require('echarts/lib/chart/lines')
 require('echarts/lib/chart/bar')
 require('echarts/lib/chart/map')
+require('echarts/lib/chart/effectScatter')
 require('echarts/lib/component/graphic')
+require('echarts/lib/component/visualMap')
+require('echarts/lib/component/geo')
 require('echarts/lib/chart/pie')
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
