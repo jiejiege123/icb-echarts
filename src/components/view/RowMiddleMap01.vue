@@ -283,12 +283,13 @@ export default {
             zlevel: 15,
             symbolSize: 5,
             rippleEffect: {
+              color: '#8378ea',
               period: 4,
               brushType: 'stroke',
               scale: 4
             },
             itemStyle: {
-              color: '#FFB800',
+              color: '#3B8ECE',
               opacity: 1
             },
             data: this.coord.slice(1)
@@ -299,6 +300,7 @@ export default {
             zlevel: 15,
             symbolSize: 8,
             rippleEffect: {
+              color: '#fb7293',
               period: 6,
               brushType: 'stroke',
               scale: 8
